@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 /**
  * Progressive-enhancement scroll reveal.
@@ -10,6 +11,8 @@ import { useEffect } from "react";
  * (staggers its direct `[data-reveal]` children).
  */
 export default function ScrollReveal() {
+  const pathname = usePathname();
+
   useEffect(() => {
     const root = document.documentElement;
     const prefersReduced = window.matchMedia(
@@ -54,7 +57,7 @@ export default function ScrollReveal() {
     els.forEach((el) => observer.observe(el));
 
     return () => observer.disconnect();
-  }, []);
+  }, [pathname]);
 
   return null;
 }
