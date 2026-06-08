@@ -1,0 +1,74 @@
+[
+  {
+    "id": "lead-1",
+    "name": "Alex Mercer",
+    "email": "alex@mercerskitchen.com",
+    "phone": "(402) 555-0123",
+    "restaurantName": "Mercer's Kitchen",
+    "posSystem": "Toast",
+    "status": "new",
+    "notes": "Interested in automated answering during the dinner rush. High call volumes between 5-8 PM. Needs Toast integration setup details.",
+    "interestLevel": "high",
+    "createdAt": "2026-06-08T18:30:00.000Z"
+  },
+  {
+    "id": "lead-2",
+    "name": "Maria Rossi",
+    "email": "m.rossi@bellatrattoria.com",
+    "phone": "(314) 555-0987",
+    "restaurantName": "Trattoria Bella",
+    "posSystem": "Clover",
+    "status": "contacted",
+    "notes": "Sent pricing structure details. Owner wants to know about handling daily combo specials and modifier pricing overrides.",
+    "interestLevel": "medium",
+    "createdAt": "2026-06-07T14:15:00.000Z"
+  },
+  {
+    "id": "lead-3",
+    "name": "Rajesh Patel",
+    "email": "rajesh@spiceheritage.com",
+    "phone": "(240) 555-0199",
+    "restaurantName": "Spice Heritage",
+    "posSystem": "Square",
+    "status": "qualified",
+    "notes": "Validated menu SKU structure. High interest. Ready for 48-hour onboarding. Wants setup of custom spice-level selections.",
+    "interestLevel": "high",
+    "createdAt": "2026-06-06T10:00:00.000Z"
+  },
+  {
+    "id": "lead-4",
+    "name": "Sarah Connor",
+    "email": "s.connor@cyberdynediner.com",
+    "phone": "(213) 555-1984",
+    "restaurantName": "Cyberdyne Diner",
+    "posSystem": "NCR Aloha",
+    "status": "demo_scheduled",
+    "notes": "Demo scheduled for Wednesday 2 PM. Particularly interested in the automated AI voice caller handling and operator transcripts panel.",
+    "interestLevel": "high",
+    "createdAt": "2026-06-05T09:30:00.000Z"
+  },
+  {
+    "id": "lead-5",
+    "name": "David Miller",
+    "email": "david@millersbbq.com",
+    "phone": "(804) 555-2244",
+    "restaurantName": "Miller's BBQ & Grill",
+    "posSystem": "Lightspeed",
+    "status": "won",
+    "notes": "Closed Won. Live since June 1st. Already routed 180+ tickets into Lightspeed. Staff reports 12 hours saved on the phone this week.",
+    "interestLevel": "high",
+    "createdAt": "2026-06-01T11:00:00.000Z"
+  },
+  {
+    "id": "lead-6",
+    "name": "Ken Tanaka",
+    "email": "tanaka@sushizen.com",
+    "phone": "(206) 555-4433",
+    "restaurantName": "Sushi Zen",
+    "posSystem": "TouchBistro",
+    "status": "lost",
+    "notes": "Closed Lost. Decided to stick with their current manual reservation system for now, as they do not offer online delivery or phone ordering.",
+    "interestLevel": "low",
+    "createdAt": "2026-05-28T16:45:00.000Z"
+  }
+]

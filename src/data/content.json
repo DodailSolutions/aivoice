@@ -1,0 +1,169 @@
+{
+  "home": {
+    "hero": {
+      "title": "A PHONE ORDERING WORKFLOW BUILT FOR RESTAURANTS",
+      "subtitle": "AI Voice HQ answers every phone call, takes orders through natural conversations, handles complex menu modifiers, and syncs clean tickets straight into your Toast, Clover, or Square POS.",
+      "ctaDemoText": "Book a 15-Min Demo",
+      "ctaExploreText": "Explore Product"
+    },
+    "roiCalculator": {
+      "defaultCalls": 1000,
+      "defaultTicket": 35
+    }
+  },
+  "product": {
+    "hero": {
+      "title": "A VOICE ORDERING WORKFLOW FOR RESTAURANTS",
+      "subtitle": "AI Voice HQ is a voice ordering workflow built for the parts of phone ordering that are hard: context, confirmation, menu complexity, and post-call accountability."
+    },
+    "highlights": [
+      {
+        "title": "Every call answered",
+        "body": "Answers rush-period calls and handles up to 20 simultaneous conversations per location."
+      },
+      {
+        "title": "Complex menu handling",
+        "body": "Handles 400+ SKU menus, rotating daily deals, meal-period categories, modifiers, and special requests."
+      },
+      {
+        "title": "POS integration",
+        "body": "Orders flow into the POS systems your staff already use, including Toast, Clover, Square, and NCR Aloha."
+      },
+      {
+        "title": "Seamless handoff",
+        "body": "Customers can ask for a real person anytime and get transferred instantly. Catering orders route to your front desk."
+      },
+      {
+        "title": "Managed launch",
+        "body": "Go live in 48 hours, then get close first-month monitoring and behavior tuning around real calls."
+      },
+      {
+        "title": "Post-call visibility",
+        "body": "Recordings, transcripts, call outcomes, and analytics help owners understand what happened after the rush."
+      }
+    ]
+  },
+  "pricing": {
+    "pricingCard": {
+      "basePrice": 300,
+      "includedOrders": 300,
+      "overageRate": 0.70
+    },
+    "faqs": [
+      {
+        "q": "Is there a setup fee?",
+        "a": "No. There is no setup fee. The first month is free and includes managed launch — we monitor real calls, review behavior, and tune the deployment to your menu."
+      },
+      {
+        "q": "What happens after the first 300 orders?",
+        "a": "After 300 orders in a month, additional orders are 70 cents each. There is no per-call charge — only completed orders count toward the meter."
+      },
+      {
+        "q": "How do customers pay for their orders?",
+        "a": "Most locations accept payment at pickup by default. If you want pre-payment, customers can receive restaurant-branded payment links. AI Voice HQ does not retain PCI card data."
+      },
+      {
+        "q": "What if I want to cancel?",
+        "a": "There is no contract or commitment. Cancel anytime with no fees or penalties."
+      },
+      {
+        "q": "Do multi-location groups get different pricing?",
+        "a": "Pricing is per location. For chains rolling out across multiple locations, we have volume arrangements — talk to us and we will walk through what fits."
+      }
+    ]
+  },
+  "integrations": {
+    "hero": {
+      "title": "ORDERS LAND WHERE YOUR STAFF ALREADY WORKS",
+      "subtitle": "AI Voice HQ integrates with the POS systems your restaurant already runs, so the call becomes part of the operating workflow instead of a separate channel."
+    },
+    "posSystems": [
+      { "name": "TOAST", "note": "Direct integration" },
+      { "name": "CLOVER", "note": "Direct integration" },
+      { "name": "SQUARE", "note": "Direct integration" },
+      { "name": "NCR ALOHA", "note": "Direct integration" },
+      { "name": "LIGHTSPEED", "note": "Direct integration" },
+      { "name": "TOUCHBISTRO", "note": "Direct integration" }
+    ]
+  },
+  "menus": {
+    "hero": {
+      "title": "ORDER FROM A REAL MENU",
+      "subtitle": "Call the line, pick a cuisine when the AI asks, then order from the menu below. The AI handles modifiers, spice levels, combos, and pickup time — then sends a clean ticket to the kitchen."
+    },
+    "cuisines": [
+      { "id": "indian", "cuisine": "Indian", "restaurant": "Spice Heritage", "blurb": "Curries, tandoor plates, biryanis, and spice level custom combos.", "emoji": "🍛" },
+      { "id": "italian", "cuisine": "Italian", "restaurant": "Trattoria Bella", "blurb": "Wood-fired pizzas, fresh pastas, and custom built combos.", "emoji": "🍕" },
+      { "id": "chinese", "cuisine": "Chinese", "restaurant": "Golden Wok", "blurb": "Wok classics, noodles, and family combo packages.", "emoji": "🥡" },
+      { "id": "mexican", "cuisine": "Mexican", "restaurant": "Casa Fiesta", "blurb": "Tacos, burritos, and platters with customizable fillings.", "emoji": "🌮" }
+    ]
+  },
+  "faq": {
+    "hero": {
+      "title": "EVERYTHING WORTH ASKING",
+      "subtitle": "How AI Voice HQ handles real restaurant operations — menus, POS, languages, payment, recordings, and what happens when a caller wants a real person."
+    },
+    "faqs": [
+      {
+        "q": "How does the AI know my menu?",
+        "a": "We configure the AI around your real menu, including items, modifiers, prices, special instructions, meal-period categories, and daily deals. We are built for large menus, including restaurants with 400+ SKUs."
+      },
+      {
+        "q": "What POS systems do you integrate with?",
+        "a": "AI Voice HQ integrates with the POS systems your staff already use — including Toast, Clover, Square, NCR Aloha, Lightspeed, and TouchBistro — and routes completed orders into your existing workflow."
+      },
+      {
+        "q": "What happens if the AI can't understand a customer?",
+        "a": "The AI confirms uncertain details, asks follow-up questions, and can transfer to staff when the situation needs a person. We tune this behavior during the managed first-month launch."
+      },
+      {
+        "q": "How many calls can the AI handle at once?",
+        "a": "AI Voice HQ handles up to 20 simultaneous calls per location. During a rush, every caller can be answered without forcing staff to juggle the phone."
+      },
+      {
+        "q": "Do I need to change my phone number?",
+        "a": "No. We work with your existing phone number through call forwarding. Your customers call the same number they always have, and they just get answered instantly now."
+      },
+      {
+        "q": "How long does setup take?",
+        "a": "Most restaurants can go live within 48 hours. The first month is a managed launch period where we actively monitor calls, review behavior, and tune the deployment around your restaurant."
+      },
+      {
+        "q": "What if I want to cancel?",
+        "a": "There's no contract or commitment. Cancel anytime with no fees or penalties. We're confident you'll love the service, which is why we offer the first month free."
+      },
+      {
+        "q": "How do customers pay for their orders?",
+        "a": "Most locations accept payment at pickup by default. If you want pre-payment, customers can receive restaurant-branded payment links. AI Voice HQ does not retain PCI card data."
+      },
+      {
+        "q": "Can the AI handle special requests and dietary restrictions?",
+        "a": "Yes. The AI is trained on your specific menu and can handle requests like 'no onions', 'extra spicy', 'gluten-free options', and complex modifications. It confirms all special requests back to the customer to ensure accuracy."
+      },
+      {
+        "q": "What if a customer wants to talk to a real person?",
+        "a": "Anytime a customer says they want to speak with someone, the AI transfers them to your staff immediately. Catering orders are automatically routed to your front desk, and after closing time, calls can be set to auto-transfer to a manager or voicemail."
+      },
+      {
+        "q": "What happens when items are out of stock?",
+        "a": "The menu syncs live with your POS. When you 86 an item, the AI knows instantly and won't offer it. Better yet, it suggests intelligent replacements like offering Sprite when you're out of 7-Up, so you don't lose the sale."
+      },
+      {
+        "q": "How do I get notified about important calls?",
+        "a": "High-priority situations like catering inquiries or customer complaints trigger instant SMS alerts to your configured staff numbers. You stay in the loop on what matters without monitoring every call."
+      },
+      {
+        "q": "What languages does the AI support?",
+        "a": "The AI prefers English but can dynamically switch to many commonly spoken languages including Hindi, Mandarin, French, and Spanish, as well as popular regional languages like Telugu, Tamil, and Bengali."
+      },
+      {
+        "q": "Can I listen to the calls and monitor AI performance?",
+        "a": "Yes. Calls include a recording notice and recordings are retained for 24 months. Operators can review recordings, transcripts, linked orders, call outcomes, and analytics in the dashboard."
+      },
+      {
+        "q": "Can you use historical recordings during setup?",
+        "a": "Yes. If a restaurant has historical recordings available, we can use them during onboarding to understand real caller patterns, menu questions, and edge cases before launch."
+      }
+    ]
+  }
+}

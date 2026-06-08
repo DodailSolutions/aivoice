@@ -1,26 +1,337 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ---- Accent (refined orange, deepened for contrast on light) ---- */
+  --color-orange: hsl(20, 90%, 50%);
+  --color-orange-glow: hsla(20, 90%, 50%, 0.12);
+  --color-orange-border: hsla(20, 90%, 50%, 0.35);
+
+  /* ---- Sleek Dark Mode (charcoal and warm accents) ---- */
+  --color-charcoal: hsl(24, 10%, 6%);       /* page background — deep charcoal black */
+  --color-charcoal-2: hsl(24, 10%, 10%);    /* cards / panels — rich dark gray */
+  --color-charcoal-3: hsl(24, 10%, 14%);    /* subtle fills / inputs */
+  --color-border-subtle: hsla(24, 10%, 25%, 0.4); /* hairline dark border */
+  --color-border-active: hsla(20, 90%, 50%, 0.45);
+
+  /* ---- Text ---- */
+  --color-text-main: hsl(38, 18%, 94%);     /* off-white for high legibility */
+  --color-text-muted: hsl(24, 6%, 65%);     /* warm gray for secondary text */
+
+  --color-success: hsl(150, 62%, 42%);
+  --color-success-glow: hsla(150, 62%, 42%, 0.15);
+  --color-danger: hsl(352, 72%, 52%);
+
+  --font-sans: var(--font-inter), sans-serif;
+  --font-heading: var(--font-outfit), sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* ---- Swiss-subtle shadows (adjusted for dark backgrounds) ---- */
+  --shadow-soft: 0 1px 2px hsla(24, 14%, 4%, 0.15), 0 6px 18px hsla(24, 14%, 4%, 0.25);
+  --shadow-glow: 0 12px 34px hsla(20, 90%, 50%, 0.3);
+  --shadow-card: 0 12px 40px hsla(24, 14%, 4%, 0.35);
+
+  /* ---- Motion ---- */
+  --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scrollbar-color: hsl(34, 10%, 80%) transparent;
+    scrollbar-width: thin;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-charcoal);
+    background-image: radial-gradient(
+      circle,
+      hsla(24, 12%, 40%, 0.07) 1px,
+      transparent 1.4px
+    );
+    background-size: 26px 26px;
+    background-position: -13px -13px;
+    color: var(--color-text-main);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    letter-spacing: -0.005em;
+  }
+
+  /* Smooth, consistent micro-interactions everywhere */
+  a,
+  button {
+    transition:
+      color 0.2s ease,
+      background-color 0.25s ease,
+      border-color 0.25s ease,
+      transform 0.3s var(--ease-smooth),
+      box-shadow 0.3s ease,
+      opacity 0.2s ease;
+  }
+
+  ::selection {
+    background: var(--color-orange);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-orange);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(34, 10%, 82%);
+    border-radius: 6px;
+    border: 2px solid var(--color-charcoal);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(34, 10%, 70%);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .badge-orange {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.8rem;
+    border-radius: 9999px;
+    background: var(--color-orange-glow);
+    color: var(--color-orange);
+    border: 1px solid var(--color-orange-border);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* ---- Interactive Terminal Call Simulator ---- */
+  .terminal-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background-color: var(--color-orange);
+    animation: terminal-blink 1s step-end infinite;
+    vertical-align: middle;
+    margin-left: 4px;
+  }
+
+  @keyframes terminal-blink {
+    from, to { background-color: transparent }
+    50% { background-color: var(--color-orange) }
+  }
+
+  .terminal-scanlines {
+    position: relative;
+  }
+  .terminal-scanlines::after {
+    content: " ";
+    display: block;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    background-size: 100% 3px, 3px 100%;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.35;
+  }
+
+  .waveform-bar {
+    display: inline-block;
+    width: 3px;
+    background-color: var(--color-orange);
+    border-radius: 9999px;
+    transform-origin: bottom;
+    animation: waveBounce 1.2s ease-in-out infinite;
+  }
+
+  @keyframes waveBounce {
+    0%, 100% { transform: scaleY(0.2); }
+    50% { transform: scaleY(1); }
+  }
+}
+
+@layer utilities {
+  .text-2xs {
+    font-size: 0.65rem;
+    line-height: 0.95rem;
+  }
+
+  /* Swiss: no neon glow — keep a crisp, slightly tighter accent treatment */
+  .text-glow {
+    letter-spacing: -0.01em;
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.6s var(--ease-smooth) both;
+  }
+  .animate-slideUp {
+    animation: slideUp 0.55s var(--ease-smooth) both;
+  }
+  .animate-scaleIn {
+    animation: scaleIn 0.5s var(--ease-smooth) both;
+  }
+  .animate-wave {
+    animation: bounceWave 1s ease-in-out infinite alternate;
+  }
+  .animate-pulse-glow {
+    animation: pulseGlow 1.5s infinite;
+  }
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounceWave {
+  from { transform: scaleY(0.3); }
+  to { transform: scaleY(1); }
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 hsla(150, 62%, 38%, 0.4); }
+  70% { transform: scale(1.05); opacity: 0.8; box-shadow: 0 0 0 8px hsla(150, 62%, 38%, 0); }
+  100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 hsla(150, 62%, 38%, 0); }
+}
+
+/* ---------- Scroll reveal (progressive enhancement) ----------
+   Hidden state only applies after JS adds `.reveal-on` to <html>,
+   so content is always visible if JS is disabled or fails. */
+.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s var(--ease-smooth),
+    transform 0.8s var(--ease-smooth);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal-on [data-reveal].reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Staggered child reveal — set delay via inline style on each item */
+.reveal-on [data-reveal-item] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.55s var(--ease-smooth),
+    transform 0.65s var(--ease-smooth);
+  will-change: opacity, transform;
+}
+.reveal-on [data-reveal].reveal-in [data-reveal-item] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ---------- Decorative ambient motion ---------- */
+@keyframes floatBlob {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(0, -20px, 0) scale(1.04); }
+}
+.animate-float-blob {
+  animation: floatBlob 14s var(--ease-smooth) infinite;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient {
+  background-size: 220% 220%;
+  animation: gradientShift 9s ease infinite;
+}
+
+/* Subtle horizontal marquee for logos / chips */
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 32s linear infinite;
+}
+
+/* Button shine sweep on hover */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    hsla(0, 0%, 100%, 0.32) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s var(--ease-smooth);
+  pointer-events: none;
+  z-index: 1;
+}
+.btn-shine:hover::after { transform: translateX(120%); }
+
+/* Refined card-lift helper */
+.lift {
+  transition:
+    transform 0.35s var(--ease-smooth),
+    box-shadow 0.35s ease,
+    border-color 0.25s ease;
+}
+.lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal-on [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
