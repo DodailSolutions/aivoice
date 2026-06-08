@@ -18,6 +18,16 @@ export default function Header() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const toggleTheme = () => {
+    try {
+      const currentTheme = document.documentElement.getAttribute("data-theme") || 
+                           (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", newTheme);
+      localStorage.setItem("theme", newTheme);
+    } catch (e) {}
+  };
+
   if (pathname?.startsWith("/admin")) {
     return null;
   }
@@ -77,56 +87,75 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* CTA Actions */}
-          <div className="hidden md:flex items-center gap-4">
-            <Link
-              href="/menus"
-              suppressHydrationWarning
-              className="text-sm font-medium text-text-muted hover:text-text-main transition-colors"
-            >
-              Live Demo
-            </Link>
-            <Link
-              href="https://order.aivoicehq.com"
-              suppressHydrationWarning
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-sm font-medium text-text-muted hover:text-text-main transition-colors"
-            >
-              Sign In
-            </Link>
-            <Link
-              href="https://cal.com/vgaligutta/15min"
-              target="_blank"
-              rel="noopener noreferrer"
-              suppressHydrationWarning
-              className="btn-shine inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-orange text-charcoal font-semibold text-sm shadow-glow hover:bg-orange/90 hover:-translate-y-0.5 transition-all active:translate-y-0"
-            >
-              Book a Demo
-            </Link>
-          </div>
+          <div className="flex items-center gap-3">
+            {/* CTA Actions */}
+            <div className="hidden md:flex items-center gap-4">
+              <Link
+                href="/menus"
+                suppressHydrationWarning
+                className="text-sm font-medium text-text-muted hover:text-text-main transition-colors"
+              >
+                Live Demo
+              </Link>
+              <Link
+                href="https://order.aivoicehq.com"
+                suppressHydrationWarning
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-text-muted hover:text-text-main transition-colors"
+              >
+                Sign In
+              </Link>
+              <Link
+                href="https://cal.com/vgaligutta/15min"
+                target="_blank"
+                rel="noopener noreferrer"
+                suppressHydrationWarning
+                className="btn-shine inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-orange text-charcoal font-semibold text-sm shadow-glow hover:bg-orange/90 hover:-translate-y-0.5 transition-all active:translate-y-0"
+              >
+                Book a Demo
+              </Link>
+            </div>
 
-          {/* Mobile Menu Toggler */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            suppressHydrationWarning
-            className="md:hidden p-2 text-text-muted hover:text-text-main focus:outline-hidden"
-            aria-label="Toggle Navigation Menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              viewBox="0 0 24 24"
+            {/* Theme Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              className="w-9 h-9 rounded-full border border-border-subtle hover:border-orange/60 text-text-muted hover:text-orange flex items-center justify-center transition-colors cursor-pointer mr-1 md:mr-0"
+              aria-label="Toggle Dark/Light Mode"
+              suppressHydrationWarning
             >
-              {mobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
-              )}
-            </svg>
-          </button>
+              {/* Sun icon */}
+              <svg className="w-5 h-5 theme-sun" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" suppressHydrationWarning>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
+              </svg>
+              {/* Moon icon */}
+              <svg className="w-4.5 h-4.5 theme-moon" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" suppressHydrationWarning>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+              </svg>
+            </button>
+
+            {/* Mobile Menu Toggler */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              suppressHydrationWarning
+              className="md:hidden p-2 text-text-muted hover:text-text-main focus:outline-hidden"
+              aria-label="Toggle Navigation Menu"
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                viewBox="0 0 24 24"
+              >
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+                )}
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
