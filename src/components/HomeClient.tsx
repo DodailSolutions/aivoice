@@ -1,0 +1,713 @@
+"use client";
+
+import Link from "next/link";
+import { useState, useEffect } from "react";
+
+export default function HomeClient({ initialContent }: { initialContent: any }) {
+  const content = initialContent;
+  
+  // --- ROI Calculator State ---
+  const [calls, setCalls] = useState(initialContent?.home?.roiCalculator?.defaultCalls || 1500);
+  const [ticket, setTicket] = useState(initialContent?.home?.roiCalculator?.defaultTicket || 35);
+
+  useEffect(() => {
+    if (initialContent?.home?.roiCalculator) {
+      setCalls(initialContent.home.roiCalculator.defaultCalls || 1500);
+      setTicket(initialContent.home.roiCalculator.defaultTicket || 35);
+    }
+  }, [initialContent]);
+
+  // Calculations
+  const missedCalls = Math.round(calls * 0.43);
+  const recoveredOrders = Math.round(missedCalls * 0.85);
+  const monthlyRevenue = recoveredOrders * ticket;
+  const annualRevenue = monthlyRevenue * 12;
+  const roiRatio = (annualRevenue / 3600).toFixed(1);
+
+  // --- Live Console Simulator State ---
+  const [dialogue, setDialogue] = useState<Array<{ sender: "caller" | "ai"; text: string }>>([]);
+  const [consoleStatus, setConsoleStatus] = useState("Incoming Call");
+  const [ticketDispatched, setTicketDispatched] = useState(false);
+
+  const dialogueScript = [
+    { sender: "caller" as const, text: "Hey! Do you guys still have the Paneer Special tonight, and can I get it less spicy?" },
+    { sender: "ai" as const, text: "Yes! The Paneer Special is available. I can set the spice level to mild. It comes with a side of basmati rice. Would you like to add garlic naan too?" },
+    { sender: "caller" as const, text: "Yeah, garlic naan sounds perfect. Make it a pickup order for 7:15 PM under Alex." },
+    { sender: "ai" as const, text: "Got it. One Paneer Special (Mild) and one Garlic Naan. Your pickup is scheduled for 7:15 PM under the name Alex. The total is $18.50. I am sending the order straight to the kitchen console now!" }
+  ];
+
+  useEffect(() => {
+    let currentIdx = 0;
+    let timer: NodeJS.Timeout;
+
+    const runScript = () => {
+      if (currentIdx < dialogueScript.length) {
+        const entry = dialogueScript[currentIdx];
+        setConsoleStatus("In Call");
+        setDialogue((prev) => [...prev, entry]);
+        currentIdx++;
+
+        const delay = entry.text.length * 35 + 1000;
+        timer = setTimeout(runScript, delay);
+      } else {
+        timer = setTimeout(() => {
+          setTicketDispatched(true);
+          setConsoleStatus("Order Sent");
+
+          // Reset loop after 8 seconds
+          timer = setTimeout(() => {
+            setDialogue([]);
+            setTicketDispatched(false);
+            setConsoleStatus("Incoming Call");
+            currentIdx = 0;
+            // Delay restart
+            timer = setTimeout(runScript, 2000);
+          }, 8000);
+        }, 1200);
+      }
+    };
+
+    const startTimer = setTimeout(runScript, 1500);
+
+    return () => {
+      clearTimeout(startTimer);
+      clearTimeout(timer);
+    };
+  }, []);
+
+  return (
+    <div className="relative overflow-hidden pt-24 pb-16">
+      {/* Background glowing rings */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange/8 rounded-full blur-[120px] pointer-events-none -z-10 animate-float-blob" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange/4 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-blob" style={{ animationDelay: "-5s" }} />
+
+      {/* Hero Section */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-20">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+          {/* Hero Left Content */}
+          <div className="lg:col-span-7 space-y-6 animate-slideUp">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange/10 border border-orange-border text-xs font-semibold text-orange uppercase tracking-wider">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-orange"></span>
+              </span>
+              Built for high-volume restaurant calls
+            </div>
+            
+            <h1 className="font-heading font-extrabold text-3xl sm:text-5xl lg:text-6xl text-text-main leading-[1.05] tracking-tight">
+              {content?.home?.hero?.title || (
+                <>
+                  NEVER MISS A <span className="text-orange text-glow">RESTAURANT ORDER</span> AGAIN
+                </>
+              )}
+            </h1>
+
+            <p className="text-base sm:text-lg lg:text-xl text-text-muted max-w-2xl leading-relaxed">
+              {content?.home?.hero?.subtitle || "AI Voice HQ answers every phone call, takes orders through natural conversations, handles complex menu modifiers, and syncs clean tickets straight into your Toast, Clover, or Square POS."}
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center gap-4 pt-4">
+              <Link
+                href="https://cal.com/vgaligutta/15min"
+                target="_blank"
+                suppressHydrationWarning
+                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 btn-shine bg-orange text-charcoal font-bold text-base rounded-full shadow-glow hover:bg-orange/95 hover:-translate-y-0.5 transition-all"
+              >
+                {content?.home?.hero?.ctaDemoText || "Book a 15-Min Demo"}
+              </Link>
+              <Link
+                href="/product"
+                suppressHydrationWarning
+                className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-charcoal-2 border border-border-subtle hover:border-text-muted font-bold text-base rounded-full transition-all text-text-main"
+              >
+                {content?.home?.hero?.ctaExploreText || "Explore Product"}
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-6 pt-8 border-t border-border-subtle/50">
+              <div className="space-y-1">
+                <div className="text-orange font-heading font-bold text-2xl">100%</div>
+                <div className="text-xs text-text-muted uppercase tracking-wider font-semibold">Calls Answered</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-orange font-heading font-bold text-2xl">20+</div>
+                <div className="text-xs text-text-muted uppercase tracking-wider font-semibold">Concurrent Lines</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-orange font-heading font-bold text-2xl">48 Hrs</div>
+                <div className="text-xs text-text-muted uppercase tracking-wider font-semibold">Go-Live Setup</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Hero Right: Live Console Simulation */}
+          <div className="lg:col-span-5 animate-scaleIn">
+            <div className="bg-[#0b0a09]/95 border border-orange-border/40 rounded-2xl overflow-hidden shadow-glow/15 terminal-scanlines backdrop-blur-md">
+              <div className="bg-charcoal-2/80 px-6 py-4 flex items-center justify-between border-b border-border-subtle/80">
+                <div className="flex items-center gap-3">
+                  <div>
+                    <div className="text-xs text-orange font-mono font-bold uppercase tracking-widest">
+                      Live Call Console
+                    </div>
+                    <div className="text-2xs text-text-muted font-mono mt-0.5">
+                      Order Transcript Simulator
+                    </div>
+                  </div>
+                  {consoleStatus === "In Call" && (
+                    <div className="flex items-end gap-[2px] h-3 px-1 pb-[2px] opacity-95">
+                      <div className="waveform-bar h-full" style={{ animationDelay: "0.1s" }} />
+                      <div className="waveform-bar h-full" style={{ animationDelay: "0.4s" }} />
+                      <div className="waveform-bar h-full" style={{ animationDelay: "0.2s" }} />
+                      <div className="waveform-bar h-full" style={{ animationDelay: "0.6s" }} />
+                      <div className="waveform-bar h-full" style={{ animationDelay: "0.3s" }} />
+                    </div>
+                  )}
+                </div>
+                <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-2xs font-bold font-mono uppercase border ${
+                  consoleStatus === "Incoming Call" 
+                    ? "bg-amber-500/10 text-amber-500 border-amber-500/35"
+                    : "bg-success-glow text-success border-success/35"
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${
+                    consoleStatus === "Incoming Call" ? "bg-amber-500 animate-pulse" : "bg-success animate-ping"
+                  }`} />
+                  {consoleStatus}
+                </div>
+              </div>
+
+              <div className="p-6 h-[340px] flex flex-col gap-4 overflow-y-auto scrollbar-thin select-none font-mono bg-black/40">
+                {dialogue.length === 0 && (
+                  <div className="flex flex-col items-center justify-center h-full text-text-muted space-y-4">
+                    <div className="w-12 h-12 bg-charcoal-2/60 border border-border-subtle rounded-full flex items-center justify-center animate-pulse">
+                      <svg className="w-5 h-5 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                    </div>
+                    <p className="text-2xs font-mono tracking-wide text-center">
+                      system_stat: waiting for inbound ring...
+                    </p>
+                  </div>
+                )}
+                {dialogue.map((msg, i) => (
+                  <div
+                    key={i}
+                    className={`w-full text-2xs leading-relaxed border-l-[2px] pl-3 py-1.5 animate-slideUp ${
+                      msg.sender === "caller"
+                        ? "border-text-muted/65 text-text-muted"
+                        : "border-orange text-orange/95"
+                    }`}
+                  >
+                    <div className="text-[9px] font-extrabold tracking-wider uppercase mb-1 opacity-75">
+                      {msg.sender === "caller" ? "> caller_input" : "> ai_response"}
+                    </div>
+                    <span>{msg.text}</span>
+                    {i === dialogue.length - 1 && (
+                      <span className="terminal-cursor" />
+                    )}
+                  </div>
+                ))}
+
+                {ticketDispatched && (
+                  <div className="bg-[#101c13]/70 border border-success/30 rounded-xl p-4 mt-2 animate-fadeIn shadow-lg shadow-success-glow/5">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[9px] font-bold font-mono tracking-widest text-success uppercase">
+                        POS Dispatch Successful
+                      </span>
+                      <span className="text-[9px] text-text-muted font-mono">
+                        Route: Toast POS
+                      </span>
+                    </div>
+                    <div className="space-y-1.5 text-xs font-mono">
+                      <div className="flex items-center gap-2 text-text-main">
+                        <svg className="w-4 h-4 text-success flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-2xs">1x Paneer Special (Mild)</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-text-main">
+                        <svg className="w-4 h-4 text-success flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span className="text-2xs">1x Garlic Naan</span>
+                      </div>
+                      <div className="border-t border-border-subtle/40 mt-2.5 pt-2.5 flex items-center justify-between text-text-muted text-[9px] font-mono">
+                        <span>Pickup: 7:15 PM</span>
+                        <span>Name: Alex</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Launch Details */}
+      <section data-reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { label: "Launch", value: "48 Hours", sub: "Managed go-live" },
+            { label: "Capacity", value: "20 Concurrent", sub: "Calls per location" },
+            { label: "Retention", value: "24 Months", sub: "Recordings & transcripts" },
+            { label: "Live Demo", value: "(240) 248-6423", sub: "Call AIVOICE now", href: "tel:+12402486423" },
+          ].map((item) => {
+            const inner = (
+              <>
+                <div className="text-2xs uppercase tracking-widest text-text-muted font-bold font-mono mb-1.5">
+                  {item.label}
+                </div>
+                <div className="font-heading font-bold text-xl text-text-main">{item.value}</div>
+                <div className="text-xs text-text-muted mt-0.5">{item.sub}</div>
+              </>
+            );
+            return item.href ? (
+              <a
+                key={item.label}
+                href={item.href}
+                className="bg-charcoal-2 border border-border-subtle hover:border-orange/40 p-5 rounded-2xl transition-all"
+              >
+                {inner}
+              </a>
+            ) : (
+              <div
+                key={item.label}
+                className="bg-charcoal-2 border border-border-subtle shadow-soft p-5 rounded-2xl"
+              >
+                {inner}
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* POS Integrations Stripe */}
+      <section data-reveal className="bg-charcoal-2/40 border-y border-border-subtle py-8 my-16 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-xs uppercase tracking-widest font-bold text-text-muted mb-6">
+            Directly integrating with 1,000+ POS networks via Deliverect
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            {["TOAST", "SQUARE", "CLOVER", "OLO", "SPOTON", "ALOHA", "LIGHTSPEED", "ALOHA"].slice(0, 6).map((pos) => (
+              <span
+                key={pos}
+                className="inline-flex items-center px-5 py-2.5 rounded-full bg-charcoal-2 border border-border-subtle shadow-soft font-heading font-bold text-sm sm:text-base tracking-wider text-text-main hover:border-orange/40 hover:text-orange transition-all"
+              >
+                {pos}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* The Core Problem */}
+      <section data-reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+          <div className="badge-orange">The Core Problem</div>
+          <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-text-main">
+            43% OF RESTAURANT CALLS RING OUT UNANSWERED
+          </h2>
+          <p className="text-text-muted text-base sm:text-lg">
+            Busy dinner rushes force your team to choose between serving the line or answering the phone. Every missed call is a customer ordering somewhere else.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/30 transition-all">
+            <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+            </div>
+            <h3 className="font-heading font-bold text-lg text-text-main">Understaffed Rushes</h3>
+            <p className="text-xs text-text-muted leading-relaxed">
+              Dinner peaks happen exactly when staff is fully loaded packing orders, cleaning tables, and serving guests.
+            </p>
+          </div>
+
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/30 transition-all">
+            <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+              </svg>
+            </div>
+            <h3 className="font-heading font-bold text-lg text-text-main">Menu Customizations</h3>
+            <p className="text-xs text-text-muted leading-relaxed">
+              Standard phone bots crash on custom requests (extra sauce, no onions, gluten-free substitutions) leaving staff to clean up tickets.
+            </p>
+          </div>
+
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/30 transition-all">
+            <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 className="font-heading font-bold text-lg text-text-main">Unpredictable Fees</h3>
+            <p className="text-xs text-text-muted leading-relaxed">
+              Competitor systems charge complex per-minute overage rates that can explode from $199 up to $1,400 during peak months.
+            </p>
+          </div>
+
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/30 transition-all">
+            <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange">
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+            <h3 className="font-heading font-bold text-lg text-text-main">Zero Accountability</h3>
+            <p className="text-xs text-text-muted leading-relaxed">
+              Without call logs, audio playback, and transcript records, operators cannot track error claims or verify transaction accuracy.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Product Workflow */}
+      <section data-reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-border-subtle/50">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+          <div className="badge-orange">How It Works</div>
+          <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-text-main">
+            FROM PHONE CALL TO KITCHEN-READY ORDER
+          </h2>
+          <p className="text-text-muted text-base sm:text-lg">
+            Every call follows a structured flow — answered, understood, confirmed, and dispatched — with full visibility after the shift.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          {[
+            {
+              title: "Caller reaches your number",
+              text: "Customers call the same restaurant number. AI Voice HQ answers and starts the right ordering flow.",
+            },
+            {
+              title: "AI understands intent",
+              text: "The agent handles questions, modifiers, dietary requests, and meal-period menu logic in natural conversation.",
+            },
+            {
+              title: "Details are confirmed",
+              text: "Spice level, substitutions, pickup time, bundles, and specials are repeated back before submission.",
+            },
+            {
+              title: "Order reaches workflow",
+              text: "Orders are sent into the configured POS or KDS your kitchen already runs on.",
+            },
+            {
+              title: "Operators review calls",
+              text: "Recordings, transcripts, outcomes, and analytics stay available after the shift.",
+            },
+          ].map((step, i) => (
+            <div
+              key={step.title}
+              className="bg-charcoal-2 border border-border-subtle shadow-soft p-6 rounded-2xl space-y-3 hover:border-orange/30 transition-all"
+            >
+              <div className="w-10 h-10 bg-orange/10 rounded-xl flex items-center justify-center text-orange font-heading font-bold">
+                {i + 1}
+              </div>
+              <h3 className="font-heading font-bold text-base text-text-main">{step.title}</h3>
+              <p className="text-xs text-text-muted leading-relaxed">{step.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Operational Proof */}
+      <section data-reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+          <div className="badge-orange">Operational Proof</div>
+          <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-text-main">
+            BUILT FOR REAL RESTAURANT VOLUME
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { value: "20", label: "Simultaneous Calls", sub: "Per location during rush" },
+            { value: "400+", label: "Menu SKUs", sub: "Handled in live operations" },
+            { value: "48hr", label: "Go-live Window", sub: "With managed launch" },
+            { value: "24mo", label: "Recording Retention", sub: "With disclosure on calls" },
+          ].map((metric) => (
+            <div
+              key={metric.label}
+              className="bg-charcoal-2 border border-border-subtle shadow-soft p-6 rounded-2xl text-center space-y-2 hover:border-orange/30 transition-all"
+            >
+              <div className="font-heading font-black text-4xl sm:text-5xl text-orange text-glow">
+                {metric.value}
+              </div>
+              <div className="text-sm font-bold text-text-main">{metric.label}</div>
+              <div className="text-xs text-text-muted">{metric.sub}</div>
+            </div>
+          ))}
+        </div>
+        <div className="text-center mt-8">
+          <Link
+            href="/integrations"
+            suppressHydrationWarning
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange hover:text-orange/80 transition-colors"
+          >
+            View all POS &amp; KDS integrations
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </Link>
+        </div>
+      </section>
+
+      {/* ROI Calculator Section */}
+      <section data-reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <div className="badge-orange">Quantifiable ROI</div>
+            <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-text-main leading-tight">
+              CALCULATE HOW MUCH REVENUE YOU ARE LOSING
+            </h2>
+            <p className="text-text-muted text-base leading-relaxed">
+              Based on extensive hospitality research, the average restaurant misses 43% of incoming calls. Our AI platform recovers 85% of those missed orders, pushing them directly to your kitchen.
+            </p>
+            <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-6 rounded-2xl flex items-start gap-4">
+              <div className="w-10 h-10 bg-success/10 rounded-lg flex items-center justify-center text-success flex-shrink-0">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                </svg>
+              </div>
+              <div>
+                <h4 className="font-bold text-sm text-text-main">High Conversion Advantage</h4>
+                <p className="text-xs text-text-muted mt-1 leading-relaxed">
+                  At a flat $300/month, AI Voice HQ pays for itself from just one and a half recovered orders per day.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Calculator Tool Widget */}
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl shadow-card space-y-6">
+            <div>
+              <div className="flex justify-between items-center text-sm font-semibold mb-2 text-text-main">
+                <span>Estimated Incoming Calls / Month</span>
+                <span className="text-orange font-mono text-base">{calls.toLocaleString()}</span>
+              </div>
+              <input
+                type="range"
+                min="200"
+                max="5000"
+                step="50"
+                value={calls}
+                suppressHydrationWarning
+                onChange={(e) => setCalls(parseInt(e.target.value))}
+                className="w-full h-2 bg-charcoal rounded-lg appearance-none cursor-pointer accent-orange"
+              />
+              <div className="flex justify-between text-2xs text-text-muted font-mono mt-1">
+                <span>200</span>
+                <span>2,500</span>
+                <span>5,000</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-center text-sm font-semibold mb-2 text-text-main">
+                <span>Average Ticket Size</span>
+                <span className="text-orange font-mono text-base">${ticket}</span>
+              </div>
+              <input
+                type="range"
+                min="15"
+                max="100"
+                step="1"
+                value={ticket}
+                suppressHydrationWarning
+                onChange={(e) => setTicket(parseInt(e.target.value))}
+                className="w-full h-2 bg-charcoal rounded-lg appearance-none cursor-pointer accent-orange"
+              />
+              <div className="flex justify-between text-2xs text-text-muted font-mono mt-1">
+                <span>$15</span>
+                <span>$50</span>
+                <span>$100</span>
+              </div>
+            </div>
+
+            <div className="bg-[#0f0e0d]/90 border border-orange-border/40 p-6 rounded-xl text-center space-y-1 shadow-glow/10 shadow-lg">
+              <div className="text-2xs uppercase tracking-wider text-text-muted font-bold font-mono">
+                Recovered Revenue / Year
+              </div>
+              <div className="text-4xl sm:text-5xl font-heading font-black text-orange text-glow drop-shadow-[0_0_10px_rgba(251,146,60,0.15)]">
+                ${annualRevenue.toLocaleString()}
+              </div>
+              <div className="text-2xs font-mono text-success font-bold pt-1 flex items-center justify-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
+                Pays for itself {roiRatio}x over our flat rate!
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Operator Social Proof Testimonials */}
+      <section data-reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-border-subtle/50">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+          <div className="badge-orange">Restaurant Partners</div>
+          <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-text-main">
+            TRUSTED BY INDEPENDENT OPERATORS
+          </h2>
+          <p className="text-text-muted text-base">
+            Read how small chain and single location owners stopped leaving sales on the line.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/20 transition-all flex flex-col justify-between">
+            <p className="text-sm italic text-text-muted leading-relaxed">
+              &quot;The busy hours used to be the leakiest. Answering phones meant slower line production. With AI Voice HQ, our POS prints pickup orders automatically. We saved $2,100 in our first month alone.&quot;
+            </p>
+            <div>
+              <div className="border-t border-border-subtle pt-4 mt-4">
+                <h4 className="font-bold text-sm text-text-main">Marcus Cheng</h4>
+                <p className="text-2xs text-text-muted uppercase tracking-wider">Owner, Golden Dragon Grill</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/20 transition-all flex flex-col justify-between">
+            <p className="text-sm italic text-text-muted leading-relaxed">
+              &quot;Setting up a voice assistant on a 150-item pizza menu with custom modifiers felt impossible. The AI Voice team customized our rules in 48 hours. Orders flow cleanly without any staff intervention.&quot;
+            </p>
+            <div>
+              <div className="border-t border-border-subtle pt-4 mt-4">
+                <h4 className="font-bold text-sm text-text-main">Luigi Esposito</h4>
+                <p className="text-2xs text-text-muted uppercase tracking-wider">Founder, Esposito&apos;s Pizzeria</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/20 transition-all flex flex-col justify-between">
+            <p className="text-sm italic text-text-muted leading-relaxed">
+              &quot;We miss zero reservation queries now. Our customers get instant text confirmation links, and their table requests sync cleanly. A total game-changer for FOH sanity.&quot;
+            </p>
+            <div>
+              <div className="border-t border-border-subtle pt-4 mt-4">
+                <h4 className="font-bold text-sm text-text-main">Sarah Jenkins</h4>
+                <p className="text-2xs text-text-muted uppercase tracking-wider">Manager, The Bistro Vienna</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Case Studies & Blog */}
+      <section data-reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-border-subtle/50">
+        <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
+          <div className="badge-orange">Learn More</div>
+          <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-text-main">
+            CASE STUDIES &amp; INSIGHTS
+          </h2>
+          <p className="text-text-muted text-base">
+            See how operators rolled out AI phone ordering, and why generic bots break on real restaurant menus.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Link
+            href="/case-studies"
+            suppressHydrationWarning
+            className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover:border-orange/40 hover:shadow-card hover:-translate-y-1 transition-all flex flex-col"
+          >
+            <div className="relative h-40 bg-linear-to-br from-orange/20 via-orange/5 to-charcoal-3 border-b border-border-subtle flex items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(90deg,currentColor_0_1px,transparent_1px_24px)] text-text-main" />
+              <svg className="w-12 h-12 text-orange relative" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <div className="p-8 space-y-4 flex flex-col flex-1">
+              <div className="text-2xs uppercase tracking-widest font-bold font-mono text-orange">
+                Case Study
+              </div>
+              <h3 className="font-heading font-bold text-xl text-text-main group-hover:text-orange transition-colors">
+                The shared problem
+              </h3>
+              <p className="text-sm text-text-muted leading-relaxed flex-1">
+                The busiest hour was the leakiest. Answering phones meant slower line production — until AI Voice HQ rolled out across the chain.
+              </p>
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange">
+                Read case studies
+                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </div>
+          </Link>
+
+          <Link
+            href="/blog"
+            suppressHydrationWarning
+            className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover:border-orange/40 hover:shadow-card hover:-translate-y-1 transition-all flex flex-col"
+          >
+            <div className="relative h-40 bg-linear-to-br from-charcoal-3 via-charcoal-3 to-orange/10 border-b border-border-subtle flex items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(0deg,currentColor_0_1px,transparent_1px_24px)] text-text-main" />
+              <svg className="w-12 h-12 text-orange relative" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+              </svg>
+            </div>
+            <div className="p-8 space-y-4 flex flex-col flex-1">
+              <div className="text-2xs uppercase tracking-widest font-bold font-mono text-orange">
+                Blog Post
+              </div>
+              <h3 className="font-heading font-bold text-xl text-text-main group-hover:text-orange transition-colors">
+                Why AI Phone Ordering Breaks on Real Restaurant Menus
+              </h3>
+              <p className="text-sm text-text-muted leading-relaxed flex-1">
+                The real test for restaurant voice AI is not whether it can answer the phone — it is whether it can hold up against a 400-item menu with modifiers.
+              </p>
+              <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-orange">
+                Read post
+                <svg className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </div>
+          </Link>
+        </div>
+      </section>
+
+      {/* CTA Final Block */}
+      <section data-reveal className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="bg-linear-to-br from-charcoal-2 to-charcoal border border-border-active/40 p-8 sm:p-12 rounded-3xl text-center space-y-6 relative overflow-hidden">
+          {/* Subtle background glow */}
+          <div className="absolute inset-0 bg-orange/5 blur-2xl rounded-full" />
+          <h2 className="font-heading font-extrabold text-3xl sm:text-4xl lg:text-5xl text-text-main relative">
+            READY TO MAKE EVERY CALL ANSWERED?
+          </h2>
+          <p className="text-text-muted text-sm sm:text-base max-w-xl mx-auto relative leading-relaxed">
+            Book a quick call and we can launch in 48 hours, then tune the deployment during your first month.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 relative">
+            <Link
+              href="https://cal.com/vgaligutta/15min"
+              target="_blank"
+              suppressHydrationWarning
+              className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 btn-shine bg-orange text-charcoal font-bold text-base rounded-full shadow-glow hover:bg-orange/95 transition-all"
+            >
+              Book Your Meeting
+            </Link>
+            <a
+              href="tel:+13106345831"
+              suppressHydrationWarning
+              className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-charcoal-3 border border-border-subtle hover:border-text-muted text-text-main font-bold text-base rounded-full transition-all"
+            >
+              Call (310) 634-5831
+            </a>
+          </div>
+          <div className="relative pt-2">
+            <a
+              href="mailto:inquiries@aivoicehq.com"
+              suppressHydrationWarning
+              className="text-sm font-mono text-text-muted hover:text-orange transition-colors"
+            >
+              inquiries@aivoicehq.com
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
