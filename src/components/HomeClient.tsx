@@ -3,6 +3,44 @@
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
+const TESTIMONIALS = [
+  {
+    quote: "The busy hours used to be the leakiest. Answering phones meant slower line production. With AI Voice HQ, our POS prints pickup orders automatically. We saved $2,100 in our first month alone.",
+    author: "Marcus Cheng",
+    role: "Owner",
+    restaurant: "Golden Dragon Grill",
+    emoji: "🐉"
+  },
+  {
+    quote: "Setting up a voice assistant on a 150-item pizza menu with custom modifiers felt impossible. The AI Voice team customized our rules in 48 hours. Orders flow cleanly without any staff intervention.",
+    author: "Luigi Esposito",
+    role: "Founder",
+    restaurant: "Esposito's Pizzeria",
+    emoji: "🍕"
+  },
+  {
+    quote: "We miss zero reservation queries now. Our customers get instant text confirmation links, and their table requests sync cleanly. A total game-changer for FOH sanity.",
+    author: "Sarah Jenkins",
+    role: "Manager",
+    restaurant: "The Bistro Vienna",
+    emoji: "🍷"
+  },
+  {
+    quote: "We used to lose 10-15 calls every Friday night because staff were too busy. AI Voice HQ took those orders, up-sold drinks on 22% of them, and sent them right to Toast. Our weekend sales are up 15%.",
+    author: "Elena Rostova",
+    role: "Co-owner",
+    restaurant: "Toscana Trattoria",
+    emoji: "🍝"
+  },
+  {
+    quote: "Our catering line is usually complicated, but the AI handles standard buffet drop-offs perfectly. If someone wants a custom package, it forwards them to our events manager. It's the best of both worlds.",
+    author: "Rajesh Patel",
+    role: "General Manager",
+    restaurant: "Taj Mahal Banquets",
+    emoji: "🍛"
+  }
+];
+
 export default function HomeClient({ initialContent }: { initialContent: any }) {
   const content = initialContent;
   
@@ -82,6 +120,41 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
       clearTimeout(timer);
     };
   }, []);
+
+  // --- Testimonials Carousel State ---
+  const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    if (!autoplay) {
+      setProgress(0);
+      return;
+    }
+    
+    // Increment progress bar every 30ms (total 6000ms duration)
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 100) {
+          setActiveTestimonial((current) => (current + 1) % TESTIMONIALS.length);
+          return 0;
+        }
+        return p + (30 / 6000) * 100;
+      });
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [autoplay, activeTestimonial]);
+
+  const handlePrev = () => {
+    setProgress(0);
+    setActiveTestimonial((prev) => (prev - 1 + TESTIMONIALS.length) % TESTIMONIALS.length);
+  };
+
+  const handleNext = () => {
+    setProgress(0);
+    setActiveTestimonial((prev) => (prev + 1) % TESTIMONIALS.length);
+  };
 
   return (
     <div className="relative overflow-hidden pt-24 pb-16">
@@ -567,7 +640,10 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
       </section>
 
       {/* Operator Social Proof Testimonials */}
-      <section data-reveal className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-border-subtle/50">
+      <section data-reveal className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-border-subtle/50 relative">
+        {/* Decorative background blur blob under the carousel */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-orange/4 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-blob" />
+
         <div className="text-center max-w-3xl mx-auto mb-12 space-y-4">
           <div className="badge-orange">Restaurant Partners</div>
           <h2 className="font-heading font-extrabold text-3xl sm:text-4xl text-text-main">
@@ -578,41 +654,97 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card flex flex-col justify-between">
-            <p className="text-sm italic text-text-muted leading-relaxed">
-              &quot;The busy hours used to be the leakiest. Answering phones meant slower line production. With AI Voice HQ, our POS prints pickup orders automatically. We saved $2,100 in our first month alone.&quot;
-            </p>
-            <div>
-              <div className="border-t border-border-subtle pt-4 mt-4">
-                <h4 className="font-bold text-sm text-text-main">Marcus Cheng</h4>
-                <p className="text-2xs text-text-muted uppercase tracking-wider">Owner, Golden Dragon Grill</p>
-              </div>
+        {/* Carousel Container */}
+        <div 
+          className="relative bg-charcoal-2 border border-border-subtle shadow-card rounded-3xl p-8 sm:p-12 overflow-hidden hover-scale-card group/carousel"
+          onMouseEnter={() => setAutoplay(false)}
+          onMouseLeave={() => setAutoplay(true)}
+          suppressHydrationWarning
+        >
+          {/* Large decorative quotation mark background */}
+          <div className="absolute top-6 left-6 text-orange/[0.04] text-8xl font-serif select-none pointer-events-none font-bold">
+            “
+          </div>
+          <div className="absolute bottom-6 right-6 text-orange/[0.04] text-8xl font-serif select-none pointer-events-none font-bold">
+            ”
+          </div>
+
+          {/* Testimonial slider track */}
+          <div className="overflow-hidden relative">
+            <div 
+              className="flex transition-transform duration-500 ease-out"
+              style={{ transform: `translate3d(-${activeTestimonial * 100}%, 0, 0)` }}
+            >
+              {TESTIMONIALS.map((t, idx) => (
+                <div key={idx} className="w-full flex-shrink-0 px-1 select-none flex flex-col justify-between min-h-[180px]">
+                  <p className="text-base sm:text-lg italic text-text-main leading-relaxed text-center font-medium">
+                    &quot;{t.quote}&quot;
+                  </p>
+                  <div className="text-center pt-8 mt-6 border-t border-border-subtle/40">
+                    <div className="flex items-center justify-center gap-2">
+                      <span className="text-xl">{t.emoji}</span>
+                      <h4 className="font-heading font-bold text-base text-text-main">{t.author}</h4>
+                    </div>
+                    <p className="text-2xs text-orange uppercase tracking-wider font-semibold font-mono mt-1">
+                      {t.role}, {t.restaurant}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
 
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card flex flex-col justify-between">
-            <p className="text-sm italic text-text-muted leading-relaxed">
-              &quot;Setting up a voice assistant on a 150-item pizza menu with custom modifiers felt impossible. The AI Voice team customized our rules in 48 hours. Orders flow cleanly without any staff intervention.&quot;
-            </p>
-            <div>
-              <div className="border-t border-border-subtle pt-4 mt-4">
-                <h4 className="font-bold text-sm text-text-main">Luigi Esposito</h4>
-                <p className="text-2xs text-text-muted uppercase tracking-wider">Founder, Esposito&apos;s Pizzeria</p>
-              </div>
-            </div>
+          {/* Autoplay progress bar indicator */}
+          <div className="absolute bottom-0 left-0 w-full h-[3px] bg-charcoal-3">
+            <div 
+              className="h-full bg-orange transition-all duration-300 ease-out" 
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Carousel Controls (Prev/Next Arrows + Dots) */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 px-2">
+          {/* Prev/Next buttons */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={handlePrev}
+              className="w-10 h-10 rounded-full border border-border-subtle bg-charcoal-2 text-text-muted hover:text-orange hover:border-orange/60 hover:-translate-x-0.5 active:translate-x-0 flex items-center justify-center transition-all cursor-pointer shadow-soft"
+              aria-label="Previous Testimonial"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              onClick={handleNext}
+              className="w-10 h-10 rounded-full border border-border-subtle bg-charcoal-2 text-text-muted hover:text-orange hover:border-orange/60 hover:translate-x-0.5 active:translate-x-0 flex items-center justify-center transition-all cursor-pointer shadow-soft"
+              aria-label="Next Testimonial"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
 
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card flex flex-col justify-between">
-            <p className="text-sm italic text-text-muted leading-relaxed">
-              &quot;We miss zero reservation queries now. Our customers get instant text confirmation links, and their table requests sync cleanly. A total game-changer for FOH sanity.&quot;
-            </p>
-            <div>
-              <div className="border-t border-border-subtle pt-4 mt-4">
-                <h4 className="font-bold text-sm text-text-main">Sarah Jenkins</h4>
-                <p className="text-2xs text-text-muted uppercase tracking-wider">Manager, The Bistro Vienna</p>
-              </div>
-            </div>
+          {/* Dots Indicator */}
+          <div className="flex items-center gap-2 order-first sm:order-last">
+            {TESTIMONIALS.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => {
+                  setProgress(0);
+                  setActiveTestimonial(idx);
+                }}
+                className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  idx === activeTestimonial 
+                    ? "w-6 h-2 bg-orange" 
+                    : "w-2 h-2 bg-charcoal-3 hover:bg-text-muted"
+                }`}
+                aria-label={`Go to slide ${idx + 1}`}
+                aria-current={idx === activeTestimonial ? "true" : "false"}
+              />
+            ))}
           </div>
         </div>
       </section>
