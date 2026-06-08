@@ -118,7 +118,7 @@ export default function MenusClient({ initialContent }: { initialContent: any })
                   key={`${active.id}-${n}`}
                   onClick={() => setLightbox(n)}
                   suppressHydrationWarning
-                  className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-border-subtle shadow-soft hover:shadow-card hover:-translate-y-0.5 hover:border-orange/40 transition-all bg-charcoal-3"
+                  className="group relative aspect-[3/4] rounded-xl overflow-hidden border border-border-subtle shadow-soft hover-scale-card bg-charcoal-3"
                   aria-label={`Open page ${n} of ${active.restaurant} menu`}
                 >
                   <Image

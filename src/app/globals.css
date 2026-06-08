@@ -225,6 +225,9 @@
   .animate-slideUp {
     animation: slideUp 0.55s var(--ease-smooth) both;
   }
+  .animate-spring-up {
+    animation: slideUpSpring 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
   .animate-scaleIn {
     animation: scaleIn 0.5s var(--ease-smooth) both;
   }
@@ -233,6 +236,14 @@
   }
   .animate-pulse-glow {
     animation: pulseGlow 1.5s infinite;
+  }
+  .hover-scale-card {
+    transition: transform 0.4s var(--ease-smooth), border-color 0.3s ease, box-shadow 0.4s ease;
+  }
+  .hover-scale-card:hover {
+    transform: scale(1.015) translateY(-2px);
+    border-color: var(--color-border-active);
+    box-shadow: var(--shadow-card);
   }
 }
 
@@ -245,6 +256,12 @@
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUpSpring {
+  0% { opacity: 0; transform: translateY(20px) scale(0.97); }
+  70% { transform: translateY(-4px) scale(1.005); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes scaleIn {
@@ -301,6 +318,22 @@
 }
 .animate-float-blob {
   animation: floatBlob 14s var(--ease-smooth) infinite;
+}
+
+@keyframes floatBlobReverse {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
+  50%      { transform: translate3d(-30px, 30px, 0) scale(0.94) rotate(90deg); }
+}
+.animate-float-blob-reverse {
+  animation: floatBlobReverse 18s var(--ease-smooth) infinite;
+}
+
+@keyframes floatBlobSide {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50%      { transform: translate3d(40px, -15px, 0) scale(1.05); }
+}
+.animate-float-blob-side {
+  animation: floatBlobSide 15s var(--ease-smooth) infinite;
 }
 
 @keyframes gradientShift {

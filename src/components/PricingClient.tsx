@@ -41,6 +41,7 @@ const FAQS = [
 
 export default function PricingClient({ initialContent }: { initialContent: any }) {
   const [orders, setOrders] = useState(450);
+  const [totalBouncing, setTotalBouncing] = useState(false);
   const content = initialContent;
 
   const basePrice = content?.pricing?.pricingCard?.basePrice ?? 300;
@@ -50,9 +51,15 @@ export default function PricingClient({ initialContent }: { initialContent: any 
   const overage = Math.max(0, orders - includedOrders);
   const monthlyTotal = basePrice + overage * overageRate;
 
+  useEffect(() => {
+    setTotalBouncing(true);
+    const t = setTimeout(() => setTotalBouncing(false), 150);
+    return () => clearTimeout(t);
+  }, [monthlyTotal]);
+
   return (
     <div className="relative overflow-hidden pt-24 pb-16" suppressHydrationWarning>
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange/5 rounded-full blur-[120px] pointer-events-none -z-10 animate-float-blob-side" />
 
       {/* Hero */}
       <section data-reveal className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center space-y-5" suppressHydrationWarning>
@@ -67,7 +74,7 @@ export default function PricingClient({ initialContent }: { initialContent: any 
 
       {/* Pricing card */}
       <section data-reveal className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pb-4" suppressHydrationWarning>
-        <div className="relative bg-charcoal-2 border border-orange-border/50 shadow-glow/15 shadow-xl rounded-3xl p-8 sm:p-12 overflow-hidden" suppressHydrationWarning>
+        <div className="relative bg-charcoal-2 border border-orange-border/50 shadow-glow/15 shadow-xl rounded-3xl p-8 sm:p-12 overflow-hidden hover-scale-card" suppressHydrationWarning>
           {/* Decorative gradient */}
           <div className="absolute -top-24 -right-24 w-72 h-72 bg-orange/15 rounded-full blur-3xl pointer-events-none" />
 
@@ -120,7 +127,7 @@ export default function PricingClient({ initialContent }: { initialContent: any 
 
       {/* Order calculator */}
       <section data-reveal className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12" suppressHydrationWarning>
-        <div className="bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl p-6 sm:p-8 space-y-6" suppressHydrationWarning>
+        <div className="bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl p-6 sm:p-8 space-y-6 hover-scale-card" suppressHydrationWarning>
           <div className="text-center space-y-1" suppressHydrationWarning>
             <div className="text-2xs uppercase tracking-widest text-text-muted font-bold font-mono" suppressHydrationWarning>
               Estimate your monthly cost
@@ -167,7 +174,12 @@ export default function PricingClient({ initialContent }: { initialContent: any 
             </div>
             <div className="bg-orange/10 border border-orange-border rounded-xl p-4" suppressHydrationWarning>
               <div className="text-2xs uppercase tracking-widest text-orange font-bold font-mono" suppressHydrationWarning>Monthly</div>
-              <div className="text-xl font-heading font-extrabold text-orange mt-1" suppressHydrationWarning>
+              <div 
+                className={`text-xl font-heading font-extrabold text-orange mt-1 transition-transform duration-150 ease-out block ${
+                  totalBouncing ? "scale-[1.05]" : "scale-100"
+                }`}
+                suppressHydrationWarning
+              >
                 ${monthlyTotal.toFixed(2)}
               </div>
               <div className="text-2xs text-orange/80 mt-0.5" suppressHydrationWarning>Total</div>

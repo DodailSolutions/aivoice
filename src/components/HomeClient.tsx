@@ -9,6 +9,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
   // --- ROI Calculator State ---
   const [calls, setCalls] = useState(initialContent?.home?.roiCalculator?.defaultCalls || 1500);
   const [ticket, setTicket] = useState(initialContent?.home?.roiCalculator?.defaultTicket || 35);
+  const [roiBouncing, setRoiBouncing] = useState(false);
 
   useEffect(() => {
     if (initialContent?.home?.roiCalculator) {
@@ -23,6 +24,13 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
   const monthlyRevenue = recoveredOrders * ticket;
   const annualRevenue = monthlyRevenue * 12;
   const roiRatio = (annualRevenue / 3600).toFixed(1);
+
+  // Trigger scale bounce on calculations update
+  useEffect(() => {
+    setRoiBouncing(true);
+    const t = setTimeout(() => setRoiBouncing(false), 150);
+    return () => clearTimeout(t);
+  }, [annualRevenue]);
 
   // --- Live Console Simulator State ---
   const [dialogue, setDialogue] = useState<Array<{ sender: "caller" | "ai"; text: string }>>([]);
@@ -77,9 +85,9 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
 
   return (
     <div className="relative overflow-hidden pt-24 pb-16">
-      {/* Background glowing rings */}
+      {/* Background glowing rings - Asynchronous Parallax */}
       <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange/8 rounded-full blur-[120px] pointer-events-none -z-10 animate-float-blob" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange/4 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-blob" style={{ animationDelay: "-5s" }} />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange/4 rounded-full blur-[100px] pointer-events-none -z-10 animate-float-blob-reverse" style={{ animationDelay: "-5s" }} />
 
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 md:pt-20">
@@ -154,12 +162,23 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
                     </div>
                   </div>
                   {consoleStatus === "In Call" && (
-                    <div className="flex items-end gap-[2px] h-3 px-1 pb-[2px] opacity-95">
-                      <div className="waveform-bar h-full" style={{ animationDelay: "0.1s" }} />
-                      <div className="waveform-bar h-full" style={{ animationDelay: "0.4s" }} />
-                      <div className="waveform-bar h-full" style={{ animationDelay: "0.2s" }} />
-                      <div className="waveform-bar h-full" style={{ animationDelay: "0.6s" }} />
-                      <div className="waveform-bar h-full" style={{ animationDelay: "0.3s" }} />
+                    <div className="flex items-end gap-[3px] h-4 px-2 pb-[2px] opacity-95">
+                      {[...Array(12)].map((_, i) => {
+                        const delay = `${(i * 0.08).toFixed(2)}s`;
+                        const duration = `${(0.7 + (i % 3) * 0.15).toFixed(2)}s`;
+                        return (
+                          <div
+                            key={i}
+                            className="waveform-bar"
+                            style={{
+                              animationDelay: delay,
+                              animationDuration: duration,
+                              height: "100%",
+                              width: "2px"
+                            }}
+                          />
+                        );
+                      })}
                     </div>
                   )}
                 </div>
@@ -191,7 +210,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
                 {dialogue.map((msg, i) => (
                   <div
                     key={i}
-                    className={`w-full text-2xs leading-relaxed border-l-[2px] pl-3 py-1.5 animate-slideUp ${
+                    className={`w-full text-2xs leading-relaxed border-l-[2px] pl-3 py-1.5 animate-spring-up ${
                       msg.sender === "caller"
                         ? "border-text-muted/65 text-text-muted"
                         : "border-orange text-orange/95"
@@ -265,7 +284,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
               <a
                 key={item.label}
                 href={item.href}
-                className="bg-charcoal-2 border border-border-subtle hover:border-orange/40 p-5 rounded-2xl transition-all"
+                className="bg-charcoal-2 border border-border-subtle hover:border-orange/40 p-5 rounded-2xl transition-all hover-scale-card"
               >
                 {inner}
               </a>
@@ -313,7 +332,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/30 transition-all">
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card">
             <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -325,7 +344,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
             </p>
           </div>
 
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/30 transition-all">
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card">
             <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
@@ -337,7 +356,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
             </p>
           </div>
 
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/30 transition-all">
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card">
             <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -349,7 +368,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
             </p>
           </div>
 
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/30 transition-all">
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card">
             <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -401,7 +420,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
           ].map((step, i) => (
             <div
               key={step.title}
-              className="bg-charcoal-2 border border-border-subtle shadow-soft p-6 rounded-2xl space-y-3 hover:border-orange/30 transition-all"
+              className="bg-charcoal-2 border border-border-subtle shadow-soft p-6 rounded-2xl space-y-3 hover-scale-card"
             >
               <div className="w-10 h-10 bg-orange/10 rounded-xl flex items-center justify-center text-orange font-heading font-bold">
                 {i + 1}
@@ -431,7 +450,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
           ].map((metric) => (
             <div
               key={metric.label}
-              className="bg-charcoal-2 border border-border-subtle shadow-soft p-6 rounded-2xl text-center space-y-2 hover:border-orange/30 transition-all"
+              className="bg-charcoal-2 border border-border-subtle shadow-soft p-6 rounded-2xl text-center space-y-2 hover-scale-card"
             >
               <div className="font-heading font-black text-4xl sm:text-5xl text-orange text-glow">
                 {metric.value}
@@ -531,7 +550,11 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
               <div className="text-2xs uppercase tracking-wider text-text-muted font-bold font-mono">
                 Recovered Revenue / Year
               </div>
-              <div className="text-4xl sm:text-5xl font-heading font-black text-orange text-glow drop-shadow-[0_0_10px_rgba(251,146,60,0.15)]">
+              <div 
+                className={`text-4xl sm:text-5xl font-heading font-black text-orange text-glow drop-shadow-[0_0_10px_rgba(251,146,60,0.15)] transition-transform duration-150 ease-out ${
+                  roiBouncing ? "scale-[1.04]" : "scale-100"
+                }`}
+              >
                 ${annualRevenue.toLocaleString()}
               </div>
               <div className="text-2xs font-mono text-success font-bold pt-1 flex items-center justify-center gap-1">
@@ -556,7 +579,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/20 transition-all flex flex-col justify-between">
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card flex flex-col justify-between">
             <p className="text-sm italic text-text-muted leading-relaxed">
               &quot;The busy hours used to be the leakiest. Answering phones meant slower line production. With AI Voice HQ, our POS prints pickup orders automatically. We saved $2,100 in our first month alone.&quot;
             </p>
@@ -568,7 +591,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
             </div>
           </div>
 
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/20 transition-all flex flex-col justify-between">
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card flex flex-col justify-between">
             <p className="text-sm italic text-text-muted leading-relaxed">
               &quot;Setting up a voice assistant on a 150-item pizza menu with custom modifiers felt impossible. The AI Voice team customized our rules in 48 hours. Orders flow cleanly without any staff intervention.&quot;
             </p>
@@ -580,7 +603,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
             </div>
           </div>
 
-          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover:border-orange/20 transition-all flex flex-col justify-between">
+          <div className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-4 hover-scale-card flex flex-col justify-between">
             <p className="text-sm italic text-text-muted leading-relaxed">
               &quot;We miss zero reservation queries now. Our customers get instant text confirmation links, and their table requests sync cleanly. A total game-changer for FOH sanity.&quot;
             </p>
@@ -610,11 +633,11 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
           <Link
             href="/case-studies"
             suppressHydrationWarning
-            className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover:border-orange/40 hover:shadow-card hover:-translate-y-1 transition-all flex flex-col"
+            className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover-scale-card flex flex-col"
           >
             <div className="relative h-40 bg-linear-to-br from-orange/20 via-orange/5 to-charcoal-3 border-b border-border-subtle flex items-center justify-center overflow-hidden">
               <div className="absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(90deg,currentColor_0_1px,transparent_1px_24px)] text-text-main" />
-              <svg className="w-12 h-12 text-orange relative" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+              <svg className="w-12 h-12 text-orange relative animate-float-blob" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
@@ -640,11 +663,11 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
           <Link
             href="/blog"
             suppressHydrationWarning
-            className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover:border-orange/40 hover:shadow-card hover:-translate-y-1 transition-all flex flex-col"
+            className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover-scale-card flex flex-col"
           >
             <div className="relative h-40 bg-linear-to-br from-charcoal-3 via-charcoal-3 to-orange/10 border-b border-border-subtle flex items-center justify-center overflow-hidden">
               <div className="absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(0deg,currentColor_0_1px,transparent_1px_24px)] text-text-main" />
-              <svg className="w-12 h-12 text-orange relative" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
+              <svg className="w-12 h-12 text-orange relative animate-float-blob-reverse" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
               </svg>
             </div>

@@ -86,7 +86,7 @@ export default async function IntegrationsPage() {
                   data-reveal-item
                   suppressHydrationWarning
                   style={{ transitionDelay: `${i * 40}ms` }}
-                  className="bg-charcoal-3 border border-border-subtle rounded-xl px-4 py-4 text-center hover:border-orange/40 hover:bg-charcoal-2 transition-all"
+                  className="bg-charcoal-3 border border-border-subtle rounded-xl px-4 py-4 text-center hover-scale-card"
                 >
                   <div className="font-heading font-bold text-base sm:text-lg tracking-wider text-text-main" suppressHydrationWarning>
                     {p.name}
@@ -118,7 +118,7 @@ export default async function IntegrationsPage() {
               data-reveal-item
               suppressHydrationWarning
               style={{ transitionDelay: `${i * 80}ms` }}
-              className="group bg-charcoal-2 border border-border-subtle shadow-soft p-7 rounded-2xl space-y-4 hover:border-orange/40 hover:shadow-card hover:-translate-y-1 transition-all"
+              className="group bg-charcoal-2 border border-border-subtle shadow-soft p-7 rounded-2xl space-y-4 hover-scale-card"
             >
               <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange group-hover:bg-orange group-hover:text-charcoal transition-colors" suppressHydrationWarning>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">

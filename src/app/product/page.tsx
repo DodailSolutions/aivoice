@@ -135,7 +135,7 @@ export default async function ProductPage() {
                 data-reveal-item
                 suppressHydrationWarning
                 style={{ transitionDelay: `${i * 50}ms` }}
-                className="group bg-charcoal-2 border border-border-subtle shadow-soft p-7 rounded-2xl space-y-3 hover:border-orange/40 hover:shadow-card hover:-translate-y-1 transition-all"
+                className="group bg-charcoal-2 border border-border-subtle shadow-soft p-7 rounded-2xl space-y-3 hover-scale-card"
               >
                 <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange group-hover:bg-orange group-hover:text-charcoal transition-colors" suppressHydrationWarning>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -195,7 +195,7 @@ export default async function ProductPage() {
               data-reveal-item
               suppressHydrationWarning
               style={{ transitionDelay: `${i * 80}ms` }}
-              className="group bg-charcoal-2 border border-border-subtle shadow-soft p-7 rounded-2xl space-y-3 hover:border-orange/40 hover:shadow-card hover:-translate-y-1 transition-all flex flex-col"
+              className="group bg-charcoal-2 border border-border-subtle shadow-soft p-7 rounded-2xl space-y-3 hover-scale-card flex flex-col"
             >
               <h3 className="font-heading font-bold text-lg text-text-main group-hover:text-orange transition-colors" suppressHydrationWarning>
                 {step.title}

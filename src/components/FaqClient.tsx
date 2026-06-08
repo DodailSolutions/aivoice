@@ -132,7 +132,7 @@ export default function FaqClient({ initialContent }: { initialContent: any }) {
         </div>
 
         {/* CTA */}
-        <div className="mt-16 bg-charcoal-2 border border-border-subtle rounded-2xl p-8 text-center space-y-4" suppressHydrationWarning>
+        <div className="mt-16 bg-charcoal-2 border border-border-subtle rounded-2xl p-8 text-center space-y-4 hover-scale-card" suppressHydrationWarning>
           <h2 className="font-heading font-bold text-2xl text-text-main" suppressHydrationWarning>
             Still have questions?
           </h2>

@@ -75,7 +75,7 @@ export default function SecurityPage() {
           {pillars.map((p) => (
             <div
               key={p.title}
-              className="bg-charcoal-2 border border-border-subtle shadow-soft p-6 rounded-2xl space-y-4 hover:border-orange/30 transition-all"
+              className="bg-charcoal-2 border border-border-subtle shadow-soft p-6 rounded-2xl space-y-4 hover-scale-card"
             >
               <div className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-orange">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
@@ -94,7 +94,7 @@ export default function SecurityPage() {
         {details.map((d) => (
           <div
             key={d.title}
-            className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-2"
+            className="bg-charcoal-2 border border-border-subtle shadow-soft p-8 rounded-2xl space-y-2 hover-scale-card"
           >
             <h2 className="font-heading font-bold text-xl text-text-main">{d.title}</h2>
             <p className="text-sm text-text-muted leading-relaxed">{d.body}</p>
@@ -104,7 +104,7 @@ export default function SecurityPage() {
 
       {/* Questions / CTA */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-linear-to-br from-charcoal-2 to-charcoal border border-border-active/40 p-8 sm:p-12 rounded-3xl text-center space-y-5">
+        <div className="bg-linear-to-br from-charcoal-2 to-charcoal border border-border-active/40 p-8 sm:p-12 rounded-3xl text-center space-y-5 hover-scale-card">
           <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-text-main">
             QUESTIONS ABOUT PRIVACY OR DATA?
           </h2>

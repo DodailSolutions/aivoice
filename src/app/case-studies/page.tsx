@@ -35,7 +35,7 @@ export default function CaseStudiesPage() {
         <Link
           href={`/case-studies/${feature.slug}`}
           suppressHydrationWarning
-          className="group block bg-charcoal-2 border border-border-subtle shadow-soft rounded-3xl overflow-hidden hover:border-orange/40 hover:shadow-card transition-all mb-8"
+          className="group block bg-charcoal-2 border border-border-subtle shadow-soft rounded-3xl overflow-hidden hover-scale-card mb-8"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12">
             <CaseStudyArt
@@ -80,7 +80,7 @@ export default function CaseStudiesPage() {
               key={study.slug}
               href={`/case-studies/${study.slug}`}
               suppressHydrationWarning
-              className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover:border-orange/40 hover:shadow-card hover:-translate-y-1 transition-all flex flex-col"
+              className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover-scale-card flex flex-col"
             >
               <div className="relative h-64 overflow-hidden border-b border-border-subtle">
                 {study.photo ? (

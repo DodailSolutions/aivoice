@@ -29,7 +29,7 @@ export default function BlogPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover:border-orange/40 hover:shadow-card hover:-translate-y-1 transition-all flex flex-col"
+              className="group bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl overflow-hidden hover-scale-card flex flex-col"
             >
               <div className="relative h-44 bg-linear-to-br from-charcoal-3 via-charcoal-3 to-orange/10 border-b border-border-subtle flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 opacity-[0.07] [background-image:repeating-linear-gradient(0deg,currentColor_0_1px,transparent_1px_24px)] text-text-main" />

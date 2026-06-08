@@ -77,7 +77,7 @@ export default async function BlogPostPage({
         </div>
 
         {/* CTA */}
-        <div className="bg-linear-to-br from-charcoal-2 to-charcoal border border-border-active/40 p-8 sm:p-10 rounded-3xl text-center space-y-5 mt-14">
+        <div className="bg-linear-to-br from-charcoal-2 to-charcoal border border-border-active/40 p-8 sm:p-10 rounded-3xl text-center space-y-5 mt-14 hover-scale-card">
           <h2 className="font-heading font-extrabold text-2xl sm:text-3xl text-text-main">
             SEE IT ON YOUR OWN MENU
           </h2>

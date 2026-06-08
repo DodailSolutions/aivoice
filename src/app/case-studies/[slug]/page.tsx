@@ -113,7 +113,7 @@ export default async function CaseStudyDetail({
         )}
 
         {/* Problem */}
-        <section className="bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl p-8 mb-8 space-y-3">
+        <section className="bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl p-8 mb-8 space-y-3 hover-scale-card">
           <div className="text-2xs font-mono font-bold uppercase tracking-widest text-danger">
             The Problem
           </div>
@@ -137,7 +137,7 @@ export default async function CaseStudyDetail({
             {study.solutions.map((s, i) => (
               <div
                 key={s.title}
-                className="bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl p-6 flex gap-4"
+                className="bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl p-6 flex gap-4 hover-scale-card"
               >
                 <div className="w-9 h-9 flex-shrink-0 bg-orange/10 rounded-lg flex items-center justify-center font-heading font-bold text-orange">
                   {i + 1}
@@ -152,7 +152,7 @@ export default async function CaseStudyDetail({
         </section>
 
         {/* Results */}
-        <section className="bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl p-8 mb-12 space-y-4">
+        <section className="bg-charcoal-2 border border-border-subtle shadow-soft rounded-2xl p-8 mb-12 space-y-4 hover-scale-card">
           <div className="text-2xs font-mono font-bold uppercase tracking-widest text-success">
             The Outcome
           </div>
