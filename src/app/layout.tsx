@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
@@ -7,6 +7,7 @@ import MobileBottomNav from "@/components/MobileBottomNav";
 import CookieBanner from "@/components/CookieBanner";
 import RecordingConsent from "@/components/RecordingConsent";
 import ScrollReveal from "@/components/ScrollReveal";
+import PwaRegister from "@/components/PwaRegister";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -18,6 +19,13 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#ff5a1f",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export const metadata: Metadata = {
   title: "AI Voice HQ | AI Phone Ordering & Answering for Restaurants",
   description:
@@ -25,6 +33,11 @@ export const metadata: Metadata = {
   keywords:
     "AI phone ordering, restaurant phone system, AI order taking, restaurant automation, missed calls restaurant, POS integration, takeout ordering, restaurant voice AI",
   robots: "index, follow",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "AI Voice HQ",
+  },
   openGraph: {
     title: "AI Voice HQ | AI Phone Ordering & Answering for Restaurants",
     description:
@@ -48,6 +61,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning className="min-h-full flex flex-col bg-charcoal text-text-main font-sans selection:bg-orange selection:text-charcoal pb-[72px] md:pb-0">
+        <PwaRegister />
         <Header />
         <main className="flex-1 flex flex-col">{children}</main>
         <Footer />
