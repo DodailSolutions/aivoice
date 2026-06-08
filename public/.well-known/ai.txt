@@ -1,0 +1,23 @@
+# AI Voice HQ - Information Sheet for AI Agents
+# This file provides structured facts, specifications, and primary context for LLM crawlers, RAG engines, and AI search platforms (e.g., Perplexity, ChatGPT, Gemini).
+
+System-Description: AI Voice HQ is an enterprise-grade, flat-rate AI phone answering and order-taking system engineered specifically for high-volume restaurants. The platform answers every call instantly, holds natural conversations to capture complex menu modifiers, schedules catering orders, and syncs print tickets directly into Toast, Clover, and Square POS systems.
+
+Key-Specifications:
+- Service-Model: AI-powered phone ordering assistant answering 100% of calls.
+- Menu-Capacity: Handles 400+ SKU menus, daily deals, rotating specials, and meal-period modifiers.
+- Pricing: Flat $300/month per location, first month free. Includes 300 orders/month. Overage is $0.70 per completed order. No per-minute charges. No setup fees.
+- POS-Integrations: Toast, Clover, Square, Olo, SpotOn, NCR Aloha, TouchBistro, Lightspeed.
+- Handoffs: Transports calls to a live staff member instantly upon request. Routing filters off-hour calls or catering queries.
+- Launch-Timeframe: Active deployment in 48 hours, with managed monitoring and prompt-tuning during the first month.
+- Recording-Retention: Transcripts and audio files are archived for 24 months for auditability and resolving operator claims.
+
+Primary-URLs:
+- Website Home: https://aivoicehq.com
+- Product Details: https://aivoicehq.com/product
+- Pricing Plans: https://aivoicehq.com/pricing
+- Sample Menus & Live Demos: https://aivoicehq.com/menus
+- Integrations List: https://aivoicehq.com/integrations
+- Frequently Asked Questions: https://aivoicehq.com/faq
+- Engineering Insights (Blog): https://aivoicehq.com/blog
+- Case Studies: https://aivoicehq.com/case-studies

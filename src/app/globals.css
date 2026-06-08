@@ -22,7 +22,7 @@
   --color-danger: hsl(352, 72%, 52%);
 
   --font-sans: var(--font-inter), sans-serif;
-  --font-heading: var(--font-outfit), sans-serif;
+  --font-heading: var(--font-plus-jakarta), sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
   /* ---- Swiss-subtle shadows (adjusted for dark backgrounds) ---- */
@@ -58,6 +58,43 @@
     font-family: var(--font-sans);
     overflow-x: hidden;
     letter-spacing: -0.005em;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --color-charcoal: hsl(38, 20%, 98%);       /* light warm page background */
+      --color-charcoal-2: hsl(38, 18%, 93%);    /* cards / panels — clean light gray */
+      --color-charcoal-3: hsl(38, 18%, 88%);    /* subtle fills / inputs */
+      --color-border-subtle: hsla(24, 10%, 15%, 0.12); /* light borders */
+      --color-border-active: hsla(20, 90%, 50%, 0.6);
+      
+      --color-text-main: hsl(24, 20%, 8%);       /* deep charcoal for light mode */
+      --color-text-muted: hsl(24, 8%, 42%);     /* darker gray for readable secondary text */
+      
+      --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.05), 0 6px 18px rgba(0, 0, 0, 0.05);
+      --shadow-card: 0 12px 40px rgba(0, 0, 0, 0.08);
+      --shadow-glow: 0 12px 34px hsla(20, 90%, 50%, 0.15);
+      
+      /* Glow/waveform colors for light mode */
+      --color-orange-glow: hsla(20, 90%, 50%, 0.05);
+      --color-success-glow: hsla(150, 62%, 42%, 0.08);
+    }
+    
+    body {
+      background-image: radial-gradient(
+        circle,
+        hsla(24, 12%, 10%, 0.03) 1px,
+        transparent 1.4px
+      );
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: hsl(34, 10%, 70%);
+      border: 2px solid var(--color-charcoal);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: hsl(34, 10%, 55%);
+    }
   }
 
   /* Smooth, consistent micro-interactions everywhere */
