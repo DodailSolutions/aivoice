@@ -224,13 +224,13 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
           {/* Hero Right: Live Console Simulation */}
           <div className="lg:col-span-5 animate-scaleIn">
             <div className="bg-[#0b0a09]/95 border border-orange-border/40 rounded-2xl overflow-hidden shadow-glow/15 terminal-scanlines backdrop-blur-md">
-              <div className="bg-charcoal-2/80 px-6 py-4 flex items-center justify-between border-b border-border-subtle/80">
+              <div className="bg-[#121110]/95 px-6 py-4 flex items-center justify-between border-b border-orange-border/20">
                 <div className="flex items-center gap-3">
                   <div>
                     <div className="text-xs text-orange font-mono font-bold uppercase tracking-widest">
                       Live Call Console
                     </div>
-                    <div className="text-2xs text-text-muted font-mono mt-0.5">
+                    <div className="text-2xs text-neutral-400 font-mono mt-0.5">
                       Order Transcript Simulator
                     </div>
                   </div>
@@ -258,19 +258,19 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
                 <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-2xs font-bold font-mono uppercase border ${
                   consoleStatus === "Incoming Call" 
                     ? "bg-amber-500/10 text-amber-500 border-amber-500/35"
-                    : "bg-success-glow text-success border-success/35"
+                    : "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                 }`}>
                   <span className={`w-1.5 h-1.5 rounded-full ${
-                    consoleStatus === "Incoming Call" ? "bg-amber-500 animate-pulse" : "bg-success animate-ping"
+                    consoleStatus === "Incoming Call" ? "bg-amber-500 animate-pulse" : "bg-emerald-400 animate-ping"
                   }`} />
                   {consoleStatus}
                 </div>
               </div>
 
-              <div className="p-6 h-[340px] flex flex-col gap-4 overflow-y-auto scrollbar-thin select-none font-mono bg-black/40">
+              <div className="p-6 h-[340px] flex flex-col gap-4 overflow-y-auto scrollbar-thin select-none font-mono bg-[#070605]">
                 {dialogue.length === 0 && (
-                  <div className="flex flex-col items-center justify-center h-full text-text-muted space-y-4">
-                    <div className="w-12 h-12 bg-charcoal-2/60 border border-border-subtle rounded-full flex items-center justify-center animate-pulse">
+                  <div className="flex flex-col items-center justify-center h-full text-neutral-400 space-y-4">
+                    <div className="w-12 h-12 bg-[#121110] border border-[#2d2925] rounded-full flex items-center justify-center animate-pulse">
                       <svg className="w-5 h-5 text-orange" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                       </svg>
@@ -285,7 +285,7 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
                     key={i}
                     className={`w-full text-2xs leading-relaxed border-l-[2px] pl-3 py-1.5 animate-spring-up ${
                       msg.sender === "caller"
-                        ? "border-text-muted/65 text-text-muted"
+                        ? "border-neutral-700 text-neutral-300"
                         : "border-orange text-orange/95"
                     }`}
                   >
@@ -300,29 +300,29 @@ export default function HomeClient({ initialContent }: { initialContent: any }) 
                 ))}
 
                 {ticketDispatched && (
-                  <div className="bg-[#101c13]/70 border border-success/30 rounded-xl p-4 mt-2 animate-fadeIn shadow-lg shadow-success-glow/5">
+                  <div className="bg-[#101c13]/80 border border-emerald-500/25 rounded-xl p-4 mt-2 animate-fadeIn shadow-lg">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-[9px] font-bold font-mono tracking-widest text-success uppercase">
+                      <span className="text-[9px] font-bold font-mono tracking-widest text-emerald-400 uppercase">
                         POS Dispatch Successful
                       </span>
-                      <span className="text-[9px] text-text-muted font-mono">
+                      <span className="text-[9px] text-neutral-400 font-mono">
                         Route: Toast POS
                       </span>
                     </div>
                     <div className="space-y-1.5 text-xs font-mono">
-                      <div className="flex items-center gap-2 text-text-main">
-                        <svg className="w-4 h-4 text-success flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <div className="flex items-center gap-2 text-neutral-200">
+                        <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                         <span className="text-2xs">1x Paneer Special (Mild)</span>
                       </div>
-                      <div className="flex items-center gap-2 text-text-main">
-                        <svg className="w-4 h-4 text-success flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                      <div className="flex items-center gap-2 text-neutral-200">
+                        <svg className="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                         <span className="text-2xs">1x Garlic Naan</span>
                       </div>
-                      <div className="border-t border-border-subtle/40 mt-2.5 pt-2.5 flex items-center justify-between text-text-muted text-[9px] font-mono">
+                      <div className="border-t border-neutral-800/80 mt-2.5 pt-2.5 flex items-center justify-between text-neutral-400 text-[9px] font-mono">
                         <span>Pickup: 7:15 PM</span>
                         <span>Name: Alex</span>
                       </div>
